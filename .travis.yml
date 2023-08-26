@@ -10,9 +10,9 @@ env:
   global:
     - DB_ENGINE=mysqli
     - DB_HOST=localhost
-    - DB_NAME=joomla_db
-    - DB_USER=joomla_user
-    - DB_PASSWORD=joomla_password
+    - DB_NAME=JOOMLA
+    - DB_USER=root
+    - DB_PASSWORD=ongzixin0104
 
 before_install:
   - sudo apt-cache search libonig
