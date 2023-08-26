@@ -1,9 +1,14 @@
-language: php
-php:
-  - 7.4
-  - 8.0
+anguage: php
 
-before_script:
+php:
+  - 8.2.9
+
+before_install:
+  - sudo apt-cache search libonig
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y libonig-dev
   - composer install --no-interaction
 
 script:
@@ -13,5 +18,20 @@ branches:
   only:
     - 4.3-dev
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+
 notifications:
   email: false
+  
+matrix:
+  allow_failures:
+    - php: 8.2.9
