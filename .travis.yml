@@ -14,14 +14,6 @@ install:
   - sudo apt-get install -y libonig-dev
   - composer install --no-interaction
 
-before_script:
-  - cp phpunit.xml.dist phpunit.xml
-  - sed -i "s/Your_DB_engine/mysqli/" phpunit.xml
-  - sed -i "s/Your_DB_host/localhost/" phpunit.xml
-  - sed -i "s/Your_DB_name/joomla_db/" phpunit.xml
-  - sed -i "s/Your_DB_user/your_db_user/" phpunit.xml
-  - sed -i "s/Your_DB_password/your_db_password/" phpunit.xml
-
 script:
   - phpunit --configuration phpunit.xml
 
