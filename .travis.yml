@@ -24,12 +24,11 @@ install:
 
 before_script:
   - cp phpunit.xml.dist phpunit.xml
-  - sed -i "mysq1i" phpunit.xml
-  - sed -i "localhost" phpunit.xml
-  - sed -i "JOOMLA" phpunit.xml
-  - sed -i "root" phpunit.xml
-  - sed -i "ongzixin0104" phpunit.xml
-
+  - sed -i "s|Your_DB_engine|mysqli|" phpunit.xml
+  - sed -i "s|Your_DB_host|localhost|" phpunit.xml
+  - sed -i "s|Your_DB_name|JOOMLA|" phpunit.xml
+  - sed -i "s|Your_DB_user|root|" phpunit.xml
+  - sed -i "s|Your_DB_password|ongzixin0104|" phpunit.xml
 script:
   - phpunit --configuration phpunit.xml
 
