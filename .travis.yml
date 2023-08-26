@@ -12,6 +12,7 @@ install:
   - composer install --no-interaction
 
 script:
+  - cd firefly-iii-asg
   - vendor/bin/phpunit --configuration phpunit.xml
 
 branches:
