@@ -9,7 +9,7 @@ before_script:
   # Checkout Joomla 4.x development branch
   - git clone --depth=1 https://github.com/joomla/joomla-cms.git
   - cd joomla-cms
-  - composer install
+  - composer install --no-interaction
   
   - cp ./phpunit.xml.dist ./phpunit.xml
   - sed -i 's|<const name="JTEST_DB_ENGINE" value="mysqli" />|<const name="JTEST_DB_ENGINE" value="mysqli" />|g' ./phpunit.xml
