@@ -1,0 +1,20 @@
+language: php
+php:
+  - 7.4
+
+before_script:
+  - cp tests/travis/configuration.php.dist tests/configuration.php
+  - cp tests/travis/travis.sql tests/sql/install.mysql.utf8.sql
+  - mysql -e 'CREATE DATABASE joomla;'
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install
+  - php tests/fetch_testing_code.php
+
+script:
+  - phpunit --configuration phpunit.xml --coverage-clover=coverage.xml
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+services:
+  - mysql
