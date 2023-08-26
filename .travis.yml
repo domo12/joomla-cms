@@ -3,6 +3,17 @@ language: php
 php:
   - 8.2.9
 
+services:
+  - mysql
+
+env:
+  global:
+    - DB_ENGINE=mysqli
+    - DB_HOST=localhost
+    - DB_NAME=joomla_db
+    - DB_USER=joomla_user
+    - DB_PASSWORD=joomla_password
+
 before_install:
   - sudo apt-cache search libonig
 
@@ -11,8 +22,15 @@ install:
   - sudo apt-get install -y libonig-dev
   - composer install --no-interaction
 
+before_script:
+  - cp phpunit.xml.dist phpunit.xml
+  - sed -i "s/Your_DB_engine/mysqli/" phpunit.xml
+  - sed -i "s/Your_DB_host/localhost/" phpunit.xml
+  - sed -i "s/Your_DB_name/joomla_db/" phpunit.xml
+  - sed -i "s/Your_DB_user/your_db_user/" phpunit.xml
+  - sed -i "s/Your_DB_password/your_db_password/" phpunit.xml
+
 script:
-  - phpunit --version
   - phpunit --configuration phpunit.xml
 
 branches:
