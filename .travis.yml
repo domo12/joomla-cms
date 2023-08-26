@@ -12,7 +12,7 @@ install:
   - composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.xml || true
+  - vendor/bin/phpunit --configuration phpunit.xml
 
 branches:
   only:
@@ -23,11 +23,6 @@ cache:
     - vendor
     - $HOME/.composer/cache
 
-services:
-  - mysql
-
-before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 
 notifications:
   email: false
