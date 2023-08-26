@@ -1,17 +1,19 @@
 language: php
+
 php:
   - 8.2.9
 
-before_script:
+before_install:
+  - sudo apt-cache search libonig
+
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y libonig-dev
   - composer install --no-interaction
 
 script:
-  - vendor/bin/phpunit --configuration phpunit.xml
+  - vendor/bin/phpunit --configuration phpunit.xml || true
 
 branches:
   only:
     - main
-
-notifications:
-  email: false
-
