@@ -6,14 +6,6 @@ php:
 services:
   - mysql
 
-env:
-  global:
-    - DB_ENGINE=mysqli
-    - DB_HOST=localhost
-    - DB_NAME=joomla_db
-    - DB_USER=joomla_user
-    - DB_PASSWORD=joomla_password
-
 before_install:
   - sudo apt-cache search libonig
 
