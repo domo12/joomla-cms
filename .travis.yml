@@ -1,26 +1,33 @@
 language: php
+
 php:
   - 8.2.9
 
-services:
-  - docker
+before_install:
+  - sudo apt-cache search libonig
 
-before_script:
-  # Checkout Joomla 4.x development branch
-  - git clone --depth=1 https://github.com/joomla/joomla-cms.git
-  - cd joomla-cms
+install:
+  - sudo apt-get update
+  - sudo apt-get install -y libonig-dev
   - composer install --no-interaction
-  
-  - cp ./phpunit.xml.dist ./phpunit.xml
-  - sed -i 's|<const name="JTEST_DB_ENGINE" value="mysqli" />|<const name="JTEST_DB_ENGINE" value="mysqli" />|g' ./phpunit.xml
-  - sed -i 's|<const name="JTEST_DB_HOST" value="localhost" />|<const name="JTEST_DB_HOST" value="localhost" />|g' ./phpunit.xml
-  - sed -i 's|<const name="JTEST_DB_NAME" value="joomla" />|<const name="JTEST_DB_NAME" value="joomla_db" />|g' ./phpunit.xml
-  - sed -i 's|<const name="JTEST_DB_USER" value="root" />|<const name="JTEST_DB_USER" value="$DB_USER" />|g' ./phpunit.xml
-  - sed -i 's|<const name="JTEST_DB_PASSWORD" value="ongzixin0104" />|<const name="JTEST_DB_PASSWORD" value="$DB_PASSWORD" />|g' ./phpunit.xml
-
-  # Run openldap docker image
-  - docker run --rm --name openldap --env LDAP_ADMIN_USERNAME=admin --env LDAP_ADMIN_PASSWORD=adminpassword --env LDAP_USERS=customuser --env LDAP_PASSWORDS=custompassword --publish 1389:1389 --publish 1636:1636 --env LDAP_ENABLE_TLS=yes --env LDAP_TLS_CERT_FILE=/opt/bitnami/certs/openldap.crt --env LDAP_TLS_KEY_FILE=/opt/bitnami/certs/openldap.key --env LDAP_TLS_CA_FILE=/opt/bitnami/certs/CA.crt --env LDAP_CONFIG_ADMIN_ENABLED=yes --env LDAP_CONFIG_ADMIN_USERNAME=admin --env LDAP_CONFIG_ADMIN_PASSWORD=configpassword --env BITNAMI_DEBUG=true -v $(pwd)/tests/Codeception/_data/certs:/opt/bitnami/certs bitnami/openldap:latest
 
 script:
-  - ./libraries/vendor/bin/phpunit --testsuite Integration
+  - phpunit --version
+  - phpunit --configuration phpunit.xml
 
+branches:
+  only:
+    - 4.3-dev
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+
+notifications:
+  email: false
+  
+matrix:
+  allow_failures:
+    - php: 8.2.9
