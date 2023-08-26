@@ -12,7 +12,7 @@ install:
   - composer install --no-interaction
 
 script:
-  - pwd
+  - phpunit --version
   - vendor/bin/phpunit --configuration phpunit.xml
 
 branches:
