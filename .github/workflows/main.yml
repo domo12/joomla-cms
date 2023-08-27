@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    env:
+      MYSQL_ROOT_PASSWORD: "ongzixin0104"      
     services:
       mysql:
         image: mysql:5.7
