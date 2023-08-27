@@ -2,6 +2,7 @@ language: php
 
 php:
   - 8.2.9
+
 services:
   - mysql
 
@@ -12,8 +13,13 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
 
 install:
-  # Install PHPUnit with compatible version (e.g., 8.x)
-  - composer require phpunit/phpunit:^10.3.2 --dev --no-interaction
+  # Install specific Composer version (2.5.8)
+  - composer self-update 2.5.8 --no-interaction
+
+before_script:
+  # Set up PHP and Composer globally
+  - phpenv global 8.2.9
+  - composer global require hirak/prestissimo
 
 script:
   - phpunit --version
