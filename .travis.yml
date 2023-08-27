@@ -16,11 +16,6 @@ install:
   # Install specific Composer version (2.5.8)
   - composer self-update 2.5.8 --no-interaction
 
-before_script:
-  # Set up PHP and Composer globally
-  - phpenv global 8.2.9
-  - composer global require hirak/prestissimo
-
 script:
   - phpunit --version
   - phpunit --configuration phpunit.xml
