@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Automated Testing
 
 on:
   push:
@@ -6,26 +6,49 @@ on:
       - '*'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set Up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
+    - name: Set Up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
 
-      - name: Install Dependencies
-        run: |
-          composer install
-          npm install
+    - name: Install Composer Dependencies
+      run: composer install
 
-      - name: Run Tests
-        run: |
-          php libraries/vendor/bin/phpunit --configuration phpunit.xml
-          npm test
+    - name: Copy and Configure phpunit.xml
+      run: |
+        cp ./phpunit.xml.dist ./phpunit.xml
+        sed -i "s/JTEST_DB_ENGINE/mysqli/g" ./phpunit.xml
+        sed -i "s/JTEST_DB_HOST/localhost/g" ./phpunit.xml
+        sed -i "s/JTEST_DB_NAME/joomla_db/g" ./phpunit.xml
+        sed -i "s/JTEST_DB_USER/Your DB user/g" ./phpunit.xml
+        sed -i "s/JTEST_DB_PASSWORD/Your Password/g" ./phpunit.xml
+        # Configure other settings if needed
 
-# You can add more steps for deployment to staging/production environments.
+    - name: Run OpenLDAP Docker Image
+      run: |
+        docker run --rm --name openldap \
+          --env LDAP_ADMIN_USERNAME=admin \
+          --env LDAP_ADMIN_PASSWORD=adminpassword \
+          --env LDAP_USERS=customuser \
+          --env LDAP_PASSWORDS=custompassword \
+          --publish 1389:1389 --publish 1636:1636 \
+          --env LDAP_ENABLE_TLS=yes \
+          --env LDAP_TLS_CERT_FILE=/opt/bitnami/certs/openldap.crt \
+          --env LDAP_TLS_KEY_FILE=/opt/bitnami/certs/openldap.key \
+          --env LDAP_TLS_CA_FILE=/opt/bitnami/certs/CA.crt \
+          --env LDAP_CONFIG_ADMIN_ENABLED=yes \
+          --env LDAP_CONFIG_ADMIN_USERNAME=admin \
+          --env LDAP_CONFIG_ADMIN_PASSWORD=configpassword \
+          --env BITNAMI_DEBUG=true \
+          -v $(pwd)/tests/Codeception/_data/certs:/opt/bitnami/certs \
+          bitnami/openldap:latest
+
+    - name: Run PHPUnit Integration Tests
+      run: ./libraries/vendor/bin/phpunit --configuration phpunit.xml
