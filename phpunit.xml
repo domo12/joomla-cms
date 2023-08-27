@@ -15,8 +15,9 @@
 	    <const name="JTEST_DB_USER" value="root" />
 	    <const name="JTEST_DB_PASSWORD" value="" />
 
+
 		<!--ldap settings are preconfigured to work with bitnami/openldap docker image-->
-		<const name="JTEST_LDAP_HOST" value="openldap" /> <!-- to disable ldap tests: set to an empty value -->
+		<const name="JTEST_LDAP_HOST" value="" /> <!-- to disable ldap tests: set to an empty value -->
 		<const name="JTEST_LDAP_PORT" value="1389" />
 		<const name="JTEST_LDAP_PORT_SSL" value="1636" />
 		<!--CACERTFILE path is relative to JPATH_ROOT-->
@@ -33,5 +34,6 @@
 		<const name="JTEST_LDAP_SEARCH_PASSWORD" value="custompassword" />
 		<const name="JTEST_LDAP_TESTUSER" value="customuser" />
 		<const name="JTEST_LDAP_TESTPASSWORD" value="custompassword" />
+
 	</php>
 </phpunit>
