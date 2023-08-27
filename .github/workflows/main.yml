@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - 4.3-dev
+      - main
 
 jobs:
   build:
@@ -13,13 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Update system and install libonig-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libonig-dev
+
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 8.2.9
+        php-version: 7.4
 
     - name: Install dependencies
       run: composer install --no-interaction
 
     - name: Run tests
-      run: phpunit --configuration phpunit.xml
+      run: libraries/vendor/bin/phpunit --configuration phpunit.xml
