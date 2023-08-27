@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_ROOT_PASSWORD: "ongzixin"
           MYSQL_DATABASE: joomla
         ports:
           - 3308:3306
