@@ -13,8 +13,8 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
 
 install:
-  # Install specific PHPUnit version
-  - composer require phpunit/phpunit:10.3.2 --dev --no-interaction
+  # Install PHPUnit with compatible version (e.g., 8.x)
+  - composer require phpunit/phpunit:^8.0 --dev --no-interaction
 
 script:
   - phpunit --version
