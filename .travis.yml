@@ -12,9 +12,9 @@ before_install:
   - mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
   - mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
 
-
 install:
-  - composer install --no-interaction
+  # Install specific PHPUnit version
+  - composer require phpunit/phpunit:10.3.2 --dev --no-interaction
 
 script:
   - phpunit --version
