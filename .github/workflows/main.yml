@@ -3,59 +3,29 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - 4.3-dev
+      - '*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: "ongzixin0104"      
-        ports:
-          - 3308:3308
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-        
+
       - name: Set Up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2.9'
-          
+          php-version: '7.4'
+
       - name: Install Dependencies
         run: |
-          composer self-update 2.5.8 --no-interaction
-          composer require phpunit/phpunit:^8.0 --dev --no-interaction
-          
-      - name: Start MySQL Service
-        run: sudo /etc/init.d/mysql start
-        
-      - name: Prepare MySQL Database
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libonig-dev
-          mysql -h localhost -P 3308 -pongzixin0104 -u ong -e 'CREATE DATABASE IF NOT EXISTS joomla;'
-          
+          composer install
+          npm install
+
       - name: Run Tests
         run: |
-          libraries/vendor/bin/phpunit --version
-          libraries/vendor/bin/phpunit --configuration phpunit.xml
-          
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-            
-      - name: Cache Composer Cache
-        uses: actions/cache@v2
-        with:
-          path: $HOME/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          php libraries/vendor/bin/phpunit --configuration phpunit.xml
+          npm test
+
+# You can add more steps for deployment to staging/production environments.
