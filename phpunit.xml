@@ -9,11 +9,11 @@
 		</testsuite>
 	</testsuites>
 	<php>
-		<const name="mysqli" value="mysqli" />
-		<const name="localhost" value="mysql" />
-		<const name="JOOMLA" value="test_joomla" />
-		<const name="root" value="joomla_ut" />
-		<const name="ongzixin0104" value="joomla_ut" />
+	    <const name="JTEST_DB_ENGINE" value="mysqli" />
+	    <const name="JTEST_DB_HOST" value="localhost" />
+	    <const name="JTEST_DB_NAME" value="joomla" />
+	    <const name="JTEST_DB_USER" value="root" />
+	    <const name="JTEST_DB_PASSWORD" value="" />
 
 		<!--ldap settings are preconfigured to work with bitnami/openldap docker image-->
 		<const name="JTEST_LDAP_HOST" value="openldap" /> <!-- to disable ldap tests: set to an empty value -->
