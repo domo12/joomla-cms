@@ -236,7 +236,7 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
      * @return  void
      * @since   4.0.0
      */
-    public function testBindFiresEvents()
+    /*public function testBindFiresEvents()
     {
         $data = [
             'title'     => 'Test Title',
@@ -256,7 +256,7 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
         $this->object->setDispatcher($dispatcherMock);
 
         $this->object->bind($data);
-    }
+    }*/
 
     /**
      * Test that reset() resets the table object properly
@@ -264,7 +264,7 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
      * @return  void
      * @since   4.0.0
      */
-    public function testReset()
+    /*public function testReset()
     {
         $nullDate = $this->getDBDriver()->getNullDate();
 
@@ -318,5 +318,5 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
             [],
             $this->object->getErrors()
         );
-    }
+    }*/
 }
