@@ -32,9 +32,11 @@ jobs:
           composer self-update 2.5.8 --no-interaction
           composer require phpunit/phpunit:^8.0 --dev --no-interaction
           
+      - name: Start MySQL Service
+        run: sudo /etc/init.d/mysql start
+        
       - name: Prepare MySQL Database
       - run: |
-          sudo /etc/init.d/mysql start
           sudo apt-get update
           sudo apt-get install -y libonig-dev
           mysql -h 127.0.0.1 -u root -pongzixin0104 -e 'CREATE DATABASE IF NOT EXISTS joomla;'
