@@ -1,54 +1,31 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - 4.3-dev
+      - 4.2-dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Update system and install libonig-dev
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libonig-dev
+      - name: Set Up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 7.4
-        
-    - name: Install dependencies
-      run: composer install --no-interaction
-        
-    - name: Install MySQL Server
-      run: sudo apt-get install -y mysql-server
+      - name: Install Dependencies
+        run: |
+          composer install
+          npm install
 
-    - name: Start MySQL Service
-      run: sudo service mysql start
+      - name: Run Tests
+        run: |
+          php vendor/bin/phpunit --configuration tests/phpunit.xml.dist
+          npm test
 
-    - name: Create MySQL Database
-      run: |
-        mysql -u root -S /var/run/mysqld/mysqld.sock -e "CREATE DATABASE IF NOT EXISTS joomla;"
-
-    - name: Check MySQL Status
-      run: sudo service mysql status
-      
-    - name: Debug MySQL Connection
-      run: |
-        echo "Checking MySQL service status..."
-        sudo service mysql status
-        echo "Trying to connect to MySQL..."
-        mysql -u root -S /var/run/mysqld/mysqld.sock -e "SHOW DATABASES;"
-
-    - name: Create MySQL Database
-      run: |
-        mysql -u root -e "CREATE DATABASE IF NOT EXISTS joomla;"
-
-    - name: Run tests
-      run: libraries/vendor/bin/phpunit --configuration phpunit.xml
+# You can add more steps for deployment to staging/production environments.
