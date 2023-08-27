@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: "ongzixin"
+          MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: joomla
         ports:
           - 3308:3306
@@ -35,8 +35,9 @@ jobs:
 
       - name: Set up MySQL database
         run: |
+          sleep 10  # Wait for MySQL to be fully ready
           mysql -h 127.0.0.1 -P 3308 -u root -e "SET PASSWORD = 'ongzixin';"
-          mysql -h 127.0.0.1 -P 3308 -u root -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('ongzixin') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 -P 3308 -u root -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
           mysql -h 127.0.0.1 -P 3308 -u root -e 'CREATE DATABASE IF NOT EXISTS joomla;'
 
       - name: Modify PHPUnit configuration
@@ -45,7 +46,7 @@ jobs:
           sed -i "s/'hostname' => 'localhost'/'hostname' => '127.0.0.1'/" phpunit.xml
           sed -i "s/'port' => 3306/'port' => 3308/" phpunit.xml
           sed -i "s/'username' => 'root'/'username' => 'root'/" phpunit.xml
-          sed -i "s/'password' => ''/'password' => 'YourChosenPassword'/" phpunit.xml
+          sed -i "s/'password' => ''/'password' => 'ongzixin'/" phpunit.xml
 
       - name: Run PHPUnit tests
         run: phpunit --version && phpunit --configuration phpunit.xml
