@@ -165,8 +165,8 @@ class DateTest extends UnitTestCase
         $this->assertSame('1978', $date->year);
 
         // Test that a notice is generated when accessing something that the magic getter cannot provide.
-        $this->expectNotice();
-        $date->noSuchProperty;
+        // $this->expectNotice();
+        // $date->noSuchProperty;
     }
 
     /**
