@@ -3,7 +3,7 @@ name: PHPUnit Tests
 on:
   push:
     branches:
-      - '*'
+      - 4.3-dev
 
 jobs:
   test:
@@ -13,10 +13,10 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: "ongzixin"
+          MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: joomla
         ports:
-          - 3306:3306
+          - 3308:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     
     steps:
@@ -35,15 +35,17 @@ jobs:
 
       - name: Set up MySQL database
         run: |
-          mysql -h 127.0.0.1 -u root -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('ongzixin') WHERE User='root'; FLUSH PRIVILEGES;"
-          mysql -h 127.0.0.1 -u root -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+          mysql -h 127.0.0.1 -P 3308 -u root -e "SET PASSWORD = 'ongzixin';"
+          mysql -h 127.0.0.1 -P 3308 -u root -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('ongzixin') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 -P 3308 -u root -e 'CREATE DATABASE IF NOT EXISTS joomla;'
 
       - name: Modify PHPUnit configuration
         run: |
           echo "Updating PHPUnit configuration..."
           sed -i "s/'hostname' => 'localhost'/'hostname' => '127.0.0.1'/" phpunit.xml
+          sed -i "s/'port' => 3306/'port' => 3308/" phpunit.xml
           sed -i "s/'username' => 'root'/'username' => 'root'/" phpunit.xml
-          sed -i "s/'password' => ''/'password' => 'ongzixin'/" phpunit.xml
+          sed -i "s/'password' => ''/'password' => 'YourChosenPassword'/" phpunit.xml
 
       - name: Run PHPUnit tests
         run: phpunit --version && phpunit --configuration phpunit.xml
