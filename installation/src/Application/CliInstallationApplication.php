@@ -8,6 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
+/*testing*/
 namespace Joomla\CMS\Installation\Application;
 
 use Joomla\Application\Web\WebClient;
