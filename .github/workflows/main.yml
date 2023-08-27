@@ -17,7 +17,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libonig-dev
-
+        mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
+        mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;
+        
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
