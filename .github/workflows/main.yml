@@ -22,9 +22,29 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: 7.4
-
+        
     - name: Install dependencies
       run: composer install --no-interaction
+        
+    - name: Install MySQL Server
+      run: sudo apt-get install -y mysql-server
+
+    - name: Start MySQL Service
+      run: sudo service mysql start
+
+    - name: Create MySQL Database
+      run: |
+        mysql -u root -S /var/run/mysqld/mysqld.sock -e "CREATE DATABASE IF NOT EXISTS joomla;"
+
+    - name: Check MySQL Status
+      run: sudo service mysql status
+      
+    - name: Debug MySQL Connection
+      run: |
+        echo "Checking MySQL service status..."
+        sudo service mysql status
+        echo "Trying to connect to MySQL..."
+        mysql -u root -S /var/run/mysqld/mysqld.sock -e "SHOW DATABASES;"
 
     - name: Create MySQL Database
       run: |
