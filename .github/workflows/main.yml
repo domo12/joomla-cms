@@ -36,8 +36,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libonig-dev
+          mysql -h 127.0.0.1 -u root -pongzixin0104 -e 'CREATE DATABASE IF NOT EXISTS joomla;'
           mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
-          mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
           
       - name: Run Tests
         run: |
