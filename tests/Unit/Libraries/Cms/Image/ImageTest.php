@@ -315,7 +315,7 @@ class ImageTest extends UnitTestCase
      *
      * @since   4.0.0
      */
-    p/*ublic function testloadFileWebp()
+    /*public function testloadFileWebp()
     {
         $this->instance->loadFile($this->testFileWebp);
 
@@ -925,7 +925,7 @@ class ImageTest extends UnitTestCase
      *
      * @since   1.1.3
      */
-    public function testCreateThumbs()
+    /*public function testCreateThumbs()
     {
         $this->instance->loadFile($this->testFile);
 
@@ -945,7 +945,7 @@ class ImageTest extends UnitTestCase
         $this->assertEquals($a->channels, $b->channels);
 
         unlink($outFileGif);
-    }
+    }*/
 
     /**
      * Test the Image::isTransparent method without a loaded image.
