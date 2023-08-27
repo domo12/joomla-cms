@@ -25,7 +25,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          php vendor/bin/phpunit --configuration tests/phpunit.xml.dist
+          php libraries/vendor/bin/phpunit --configuration tests/phpunit.xml.dist
           npm test
 
 # You can add more steps for deployment to staging/production environments.
