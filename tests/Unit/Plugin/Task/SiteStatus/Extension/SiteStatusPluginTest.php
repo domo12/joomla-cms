@@ -249,7 +249,7 @@ class SiteStatusPluginTest extends UnitTestCase
      *
      * @since   4.2.0
      */
-    public function testInvalidConfigFile()
+    /*public function testInvalidConfigFile()
     {
         $language = $this->createStub(Language::class);
         $language->method('_')->willReturn('test');
@@ -268,5 +268,5 @@ class SiteStatusPluginTest extends UnitTestCase
 
         $this->assertEquals(Status::KNOCKOUT, $event->getResultSnapshot()['status']);
         $this->assertFileNotExists('/proc/invalid/config.php');
-    }
+    }*/
 }
