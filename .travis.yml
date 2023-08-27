@@ -15,7 +15,7 @@ before_install:
 install:
   # Install specific Composer version (2.5.8)
   - composer self-update 2.5.8 --no-interaction
-  - composer require phpunit/phpunit:^10.0 --dev --no-interaction
+  - composer require phpunit/phpunit:^8.0 --dev --no-interaction
 
 script:
   - phpunit --version
