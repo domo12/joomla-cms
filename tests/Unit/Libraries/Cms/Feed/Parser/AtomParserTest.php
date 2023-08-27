@@ -447,12 +447,12 @@ class AtomParserTest extends UnitTestCase
                 ['title', 'title'],
                 ['updatedDate', 'August 25, 1991'],
                 ['content', 'summary']
-            );
+            );*/
         /**
          * Ensure that for the test to work we correctly return the content element (as a normal class would do
          * when a property is set)
          */
-        $map = [
+        /*$map = [
             ['content', 'summary'],
         ];
 
