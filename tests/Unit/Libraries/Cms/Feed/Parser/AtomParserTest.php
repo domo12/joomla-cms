@@ -439,7 +439,7 @@ class AtomParserTest extends UnitTestCase
 			<title>title</title><updated>August 25, 1991</updated><summary>summary</summary></entry>');
 
         $feedEntryMock = $this->createMock(FeedEntry::class);
-        $feedEntryMock
+        /*$feedEntryMock
             ->expects($this->exactly(4))
             ->method('__set')
             ->withConsecutive(
@@ -447,8 +447,16 @@ class AtomParserTest extends UnitTestCase
                 ['title', 'title'],
                 ['updatedDate', 'August 25, 1991'],
                 ['content', 'summary']
+            );*/
+        $feedEntryMock
+            ->expects($this->exactly(4))
+            ->method('__set')
+            ->withConsecutive(
+                [$this->equalTo('uri'), $this->equalTo('http://example.com/id')],
+                [$this->equalTo('title'), $this->equalTo('title')],
+                [$this->equalTo('updatedDate'), $this->equalTo('August 25, 1991')],
+                [$this->equalTo('content'), $this->equalTo('summary')]
             );
-
         /**
          * Ensure that for the test to work we correctly return the content element (as a normal class would do
          * when a property is set)
