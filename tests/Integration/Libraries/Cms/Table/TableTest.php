@@ -40,7 +40,7 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
      *
      * @since   4.0.0
      */
-    /**
+    
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,7 +48,7 @@ class TableTest extends IntegrationTestCase implements DBTestInterface
         $dispatcher   = new Dispatcher();
         $this->object = $this->getMockForAbstractClass(Table::class, ['#__testtable', 'id', $this->getDBDriver(), $dispatcher]);
     }
-    **/
+    
     /**
      * Retrieve a list of schemas to load for this testcase
      *
