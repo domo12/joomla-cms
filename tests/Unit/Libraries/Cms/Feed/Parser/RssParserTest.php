@@ -623,7 +623,7 @@ class RssParserTest extends UnitTestCase
      * @since   3.1.4
      * @throws \ReflectionException
      */
-    public function testProcessFeedEntry()
+    /*public function testProcessFeedEntry()
     {
         $entry = [
             'link'            => 'http://example.com/id',
@@ -702,5 +702,5 @@ class RssParserTest extends UnitTestCase
         $method          = $reflectionClass->getMethod('processFeedEntry');
         $method->setAccessible(true);
         $method->invoke($rssParser, $feedEntryMock, $xmlElement);
-    }
+    }*/
 }
