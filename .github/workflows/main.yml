@@ -36,11 +36,10 @@ jobs:
         run: sudo /etc/init.d/mysql start
         
       - name: Prepare MySQL Database
-      - run: |
+        run: |
           sudo apt-get update
           sudo apt-get install -y libonig-dev
-          mysql -h 127.0.0.1 -u root -pongzixin0104 -e 'CREATE DATABASE IF NOT EXISTS joomla;'
-          mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 -P 3308 -u root -pongzixin0104 -e 'CREATE DATABASE IF NOT EXISTS joomla;'
           
       - name: Run Tests
         run: |
@@ -60,5 +59,3 @@ jobs:
         with:
           path: $HOME/.composer/cache
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          
-    # You can add more steps for deployment to staging/production environments.
