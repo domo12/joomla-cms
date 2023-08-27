@@ -1,4 +1,4 @@
-name: Automated Testing
+name: PHP CI
 
 on:
   push:
@@ -6,32 +6,33 @@ on:
       - '*'
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4' # Choose the appropriate PHP version
-        extensions: mbstring, xml, zip, ldap # Add any required extensions
-        
-    - name: Install Composer dependencies
-      run: composer install
-      
-    - name: Copy phpunit.xml.dist to phpunit.xml
-      run: cp phpunit.xml.dist phpunit.xml
-      
-    - name: Configure phpunit.xml
-      run: |
-        sed -i 's/JTEST_DB_ENGINE="mysqli"/JTEST_DB_ENGINE="pgsql"/' phpunit.xml
-        sed -i 's/JTEST_DB_HOST="localhost"/JTEST_DB_HOST="your_db_host"/' phpunit.xml
-        sed -i 's/JTEST_DB_NAME="joomla_db"/JTEST_DB_NAME="your_db_name"/' phpunit.xml
-        sed -i 's/JTEST_DB_USER="Your DB user"/JTEST_DB_USER="your_db_user"/' phpunit.xml
-        sed -i 's/JTEST_DB_PASSWORD="Your Password"/JTEST_DB_PASSWORD="your_db_password"/' phpunit.xml
-                
-    - name: Run PHPUnit Integration tests
-      run: ./libraries/vendor/bin/phpunit --testsuite Integration
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: ""
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2.9
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libonig-dev
+          mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+          composer self-update 2.5.8 --no-interaction
+          composer require phpunit/phpunit:^8.0 --dev --no-interaction
+
+      - name: Run tests
+        run: |
+          php libraries/vendor/bin/phpunit --configuration phpunit.xml
