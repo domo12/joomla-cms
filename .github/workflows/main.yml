@@ -3,52 +3,35 @@ name: Automated Testing
 on:
   push:
     branches:
-      - '*'
+      - 'development'
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout Repository
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set Up PHP
+    - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.4
-
-    - name: Install Composer Dependencies
+        php-version: '7.4' # Choose the appropriate PHP version
+        extensions: mbstring, xml, zip, ldap # Add any required extensions
+        
+    - name: Install Composer dependencies
       run: composer install
-
-    - name: Copy and Configure phpunit.xml
+      
+    - name: Copy phpunit.xml.dist to phpunit.xml
+      run: cp phpunit.xml.dist phpunit.xml
+      
+    - name: Configure phpunit.xml
       run: |
-        cp ./phpunit.xml.dist ./phpunit.xml
-        sed -i "s/JTEST_DB_ENGINE/mysqli/g" ./phpunit.xml
-        sed -i "s/JTEST_DB_HOST/localhost/g" ./phpunit.xml
-        sed -i "s/JTEST_DB_NAME/joomla_db/g" ./phpunit.xml
-        sed -i "s/JTEST_DB_USER/Your DB user/g" ./phpunit.xml
-        sed -i "s/JTEST_DB_PASSWORD/Your Password/g" ./phpunit.xml
-        # Configure other settings if needed
-
-    - name: Run OpenLDAP Docker Image
-      run: |
-        docker run --rm --name openldap \
-          --env LDAP_ADMIN_USERNAME=admin \
-          --env LDAP_ADMIN_PASSWORD=adminpassword \
-          --env LDAP_USERS=customuser \
-          --env LDAP_PASSWORDS=custompassword \
-          --publish 1389:1389 --publish 1636:1636 \
-          --env LDAP_ENABLE_TLS=yes \
-          --env LDAP_TLS_CERT_FILE=/opt/bitnami/certs/openldap.crt \
-          --env LDAP_TLS_KEY_FILE=/opt/bitnami/certs/openldap.key \
-          --env LDAP_TLS_CA_FILE=/opt/bitnami/certs/CA.crt \
-          --env LDAP_CONFIG_ADMIN_ENABLED=yes \
-          --env LDAP_CONFIG_ADMIN_USERNAME=admin \
-          --env LDAP_CONFIG_ADMIN_PASSWORD=configpassword \
-          --env BITNAMI_DEBUG=true \
-          -v $(pwd)/tests/Codeception/_data/certs:/opt/bitnami/certs \
-          bitnami/openldap:latest
-
-    - name: Run PHPUnit Integration Tests
-      run: ./libraries/vendor/bin/phpunit --configuration phpunit.xml
+        sed -i 's/JTEST_DB_ENGINE="mysqli"/JTEST_DB_ENGINE="pgsql"/' phpunit.xml
+        sed -i 's/JTEST_DB_HOST="localhost"/JTEST_DB_HOST="your_db_host"/' phpunit.xml
+        sed -i 's/JTEST_DB_NAME="joomla_db"/JTEST_DB_NAME="your_db_name"/' phpunit.xml
+        sed -i 's/JTEST_DB_USER="Your DB user"/JTEST_DB_USER="your_db_user"/' phpunit.xml
+        sed -i 's/JTEST_DB_PASSWORD="Your Password"/JTEST_DB_PASSWORD="your_db_password"/' phpunit.xml
+                
+    - name: Run PHPUnit Integration tests
+      run: ./libraries/vendor/bin/phpunit --testsuite Integration
