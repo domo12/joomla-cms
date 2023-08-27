@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - 4.3-dev
+      - main
 
 jobs:
   build:
@@ -17,9 +17,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libonig-dev
-        mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
-        mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;
-        
+
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -27,6 +25,14 @@ jobs:
 
     - name: Install dependencies
       run: composer install --no-interaction
+
+    - name: Create MySQL Database
+      env:
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      run: |
+        mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS joomla;"
+
+
 
     - name: Run tests
       run: libraries/vendor/bin/phpunit --configuration phpunit.xml
