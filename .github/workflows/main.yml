@@ -1,4 +1,4 @@
-name: PHP CI
+name: PHPUnit Tests
 
 on:
   push:
@@ -6,33 +6,44 @@ on:
       - '*'
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
+    
     services:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: ""
-
+          MYSQL_ROOT_PASSWORD: "ongzixin"
+          MYSQL_DATABASE: joomla
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-
+        
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2.9
+          coverage: none
+          extensions: mbstring
 
       - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libonig-dev
-          mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
-          mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
-          composer self-update 2.5.8 --no-interaction
-          composer require phpunit/phpunit:^8.0 --dev --no-interaction
+        run: composer install --no-interaction
 
-      - name: Run tests
+      - name: Set up MySQL database
         run: |
-          php libraries/vendor/bin/phpunit --configuration phpunit.xml
+          mysql -h 127.0.0.1 -u root -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -h 127.0.0.1 -u root -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+
+      - name: Modify PHPUnit configuration
+        run: |
+          echo "Updating PHPUnit configuration..."
+          sed -i "s/'hostname' => 'localhost'/'hostname' => '127.0.0.1'/" phpunit.xml
+          sed -i "s/'username' => 'root'/'username' => 'root'/" phpunit.xml
+          sed -i "s/'password' => ''/'password' => 'ongzixin'/" phpunit.xml
+
+      - name: Run PHPUnit tests
+        run: phpunit --version && phpunit --configuration phpunit.xml
