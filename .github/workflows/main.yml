@@ -39,7 +39,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libonig-dev
-          mysql -h localhost -P 3308 -u domo -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+          mysql -h localhost -P 3308 -p ongzixin -u domo -e 'CREATE DATABASE IF NOT EXISTS joomla;'
           
       - name: Run Tests
         run: |
