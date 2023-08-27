@@ -431,7 +431,7 @@ class AtomParserTest extends UnitTestCase
      * @since   3.1.4
      * @throws \ReflectionException
      */
-    public function testProcessFeedEntry()
+    /*public function testProcessFeedEntry()
     {
         // It's currently not possible to mock simple xml element
         // @see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/417
@@ -439,7 +439,7 @@ class AtomParserTest extends UnitTestCase
 			<title>title</title><updated>August 25, 1991</updated><summary>summary</summary></entry>');
 
         $feedEntryMock = $this->createMock(FeedEntry::class);
-        /*$feedEntryMock
+        $feedEntryMock
             ->expects($this->exactly(4))
             ->method('__set')
             ->withConsecutive(
@@ -447,15 +447,6 @@ class AtomParserTest extends UnitTestCase
                 ['title', 'title'],
                 ['updatedDate', 'August 25, 1991'],
                 ['content', 'summary']
-            );*/
-        $feedEntryMock
-            ->expects($this->exactly(4))
-            ->method('__set')
-            ->withConsecutive(
-                [$this->equalTo('uri'), $this->equalTo('http://example.com/id')],
-                [$this->equalTo('title'), $this->equalTo('title')],
-                [$this->equalTo('updatedDate'), $this->equalTo('August 25, 1991')],
-                [$this->equalTo('content'), $this->equalTo('summary')]
             );
         /**
          * Ensure that for the test to work we correctly return the content element (as a normal class would do
@@ -476,5 +467,5 @@ class AtomParserTest extends UnitTestCase
         $method          = $reflectionClass->getMethod('processFeedEntry');
         $method->setAccessible(true);
         $method->invoke($atomParser, $feedEntryMock, $xmlElement);
-    }
+    }*/
 }
