@@ -13,7 +13,7 @@ before_install:
 
 install:
   # Install PHPUnit with compatible version (e.g., 8.x)
-  - composer require phpunit/phpunit:^8.1.6 --dev --no-interaction
+  - composer require phpunit/phpunit:^10.3.2 --dev --no-interaction
 
 script:
   - phpunit --version
