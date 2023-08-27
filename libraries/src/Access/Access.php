@@ -7,7 +7,6 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-/*test*/
 namespace Joomla\CMS\Access;
 
 use Joomla\CMS\Component\ComponentHelper;
