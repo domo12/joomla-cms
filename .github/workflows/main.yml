@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: "ongzixin"
+          MYSQL_ROOT_PASSWORD: "ongzixin0104"
         ports:
           - 3308:3308
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -39,7 +39,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libonig-dev
-          mysql -h 127.0.0.1 -P 3306 -u root -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+          mysql -h 127.0.0.1 -P 3306 -u ong -e 'CREATE DATABASE IF NOT EXISTS joomla;'
           
       - name: Run Tests
         run: |
