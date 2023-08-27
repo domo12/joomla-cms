@@ -8,24 +8,54 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: ""
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+        
       - name: Set Up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
-
+          php-version: '8.2.9'
+          
       - name: Install Dependencies
         run: |
-          composer install
-          npm install
-
+          composer self-update 2.5.8 --no-interaction
+          composer require phpunit/phpunit:^8.0 --dev --no-interaction
+          
+      - name: Prepare MySQL Database
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libonig-dev
+          mysql -e "USE mysql; UPDATE user SET authentication_string=PASSWORD('') WHERE User='root'; FLUSH PRIVILEGES;"
+          mysql -e 'CREATE DATABASE IF NOT EXISTS joomla;'
+          
       - name: Run Tests
         run: |
-          php libraries/vendor/bin/phpunit --configuration phpunit.xml
-          npm test
-
-# You can add more steps for deployment to staging/production environments.
+          libraries/vendor/bin/phpunit --version
+          libraries/vendor/bin/phpunit --configuration phpunit.xml
+          
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+            
+      - name: Cache Composer Cache
+        uses: actions/cache@v2
+        with:
+          path: $HOME/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          
+    # You can add more steps for deployment to staging/production environments.
