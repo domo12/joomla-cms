@@ -23,18 +23,6 @@ cache:
     - $HOME/.composer/cache
 notifications:
   email: false
-
-after_script:
-  - bash generate_build_summary.sh
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  local_dir: artifacts
-  on:
-    branch: 4.3-dev  
-    
 matrix:
   allow_failures:
     - php: 8.2.9
