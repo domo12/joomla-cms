@@ -16,7 +16,7 @@ script:
   - phpunit --configuration phpunit.xml
 branches:
   only:
-    - ‘*’
+    - '*'
 cache:
   directories:
     - vendor
