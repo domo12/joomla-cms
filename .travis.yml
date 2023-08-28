@@ -24,6 +24,10 @@ cache:
     - $HOME/.composer/cache
 notifications:
   email: false
+
+after_script:
+  - bash generate_build_summary.sh
+
 matrix:
   allow_failures:
     - php: 8.2.9
