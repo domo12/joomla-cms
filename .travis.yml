@@ -1,4 +1,4 @@
-language: php								 .travis.yml
+language: php	
 php:
   - 8.2.9
 services:
@@ -30,7 +30,7 @@ after_script:
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: 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
+  github_token: $GITHUB_TOKEN
   local_dir: artifacts
   on:
     branch: 4.3-dev  
